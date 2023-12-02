@@ -130,7 +130,7 @@ print("Part 1:", id_sum)
 
 # Open the file
 with open(fpath, "r") as f:
-    # Define a running sum of game IDs
+    # Define a running sum of game power
     power_sum = 0
 
     # Loop over the file
