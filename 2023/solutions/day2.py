@@ -143,7 +143,7 @@ with open(fpath, "r") as f:
         # Define a dictionary of minima to be updated
         max_count = {"red": 0, "green": 0, "blue": 0}
 
-        # Check if the maximum amount is exceeding in this game
+        # Check the maximum amount need for this game
         for bag_pull in game.split(";"):
             for color_str in bag_pull.split(","):
                 num, color = color_str.split(" ")[1:]
@@ -155,7 +155,7 @@ with open(fpath, "r") as f:
         print(max_count)
         power = np.prod(list(max_count.values()))
 
-        # If possible add the ID to the sum
+        # Add the power to the sum
         power_sum += power
 
 print("Part 2:", power_sum)
