@@ -79,23 +79,15 @@ with open(fpath, "r") as f:
         for ind in range(len(line)):
             subset = forward_line[ind : ind + 5]
             subset = (
-                subset.replace("one", "1")
-                .replace("two", "2")
-                .replace("three", "3")
+                subset.replace("one", "1").replace("two", "2").replace("three", "3")
             )
             subset = (
-                subset.replace("four", "4")
-                .replace("five", "5")
-                .replace("six", "6")
+                subset.replace("four", "4").replace("five", "5").replace("six", "6")
             )
             subset = (
-                subset.replace("seven", "7")
-                .replace("eight", "8")
-                .replace("nine", "9")
+                subset.replace("seven", "7").replace("eight", "8").replace("nine", "9")
             )
-            forward_line = (
-                forward_line[:ind] + subset + forward_line[ind + 5 :]
-            )
+            forward_line = forward_line[:ind] + subset + forward_line[ind + 5 :]
 
             # If we've changed the line we found the first number and can stop
             if forward_line != line:
@@ -111,27 +103,20 @@ with open(fpath, "r") as f:
         # Define new line for moving backwards
         backward_line = line
 
-        # Replace word numbers with numeric numbers starting from the start
+        # Replace word numbers with numeric numbers starting from the end
+        # (with some overspill)
         for ind in range(len(line), -1, -1):
             subset = backward_line[ind : ind + 5]
             subset = (
-                subset.replace("one", "1")
-                .replace("two", "2")
-                .replace("three", "3")
+                subset.replace("one", "1").replace("two", "2").replace("three", "3")
             )
             subset = (
-                subset.replace("four", "4")
-                .replace("five", "5")
-                .replace("six", "6")
+                subset.replace("four", "4").replace("five", "5").replace("six", "6")
             )
             subset = (
-                subset.replace("seven", "7")
-                .replace("eight", "8")
-                .replace("nine", "9")
+                subset.replace("seven", "7").replace("eight", "8").replace("nine", "9")
             )
-            backward_line = (
-                backward_line[:ind] + subset + backward_line[ind + 5 :]
-            )
+            backward_line = backward_line[:ind] + subset + backward_line[ind + 5 :]
 
             # If we've changed the line we found the first number and can stop
             if backward_line != line:
