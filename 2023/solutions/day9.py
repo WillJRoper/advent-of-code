@@ -131,6 +131,11 @@ for each history. What is the sum of these extrapolated values?
 """
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+from matplotlib import colormaps
+from matplotlib.colors import LogNorm
+from scipy.interpolate import interp1d
 
 
 # Part 1
@@ -175,6 +180,7 @@ for line in lines:
 
 print("Part 1:", result)
 
+
 # Part 2
 
 
@@ -202,3 +208,78 @@ for line in lines:
     result += recursive_history(line)
 
 print("Part 2:", result)
+
+# Make a pretty plot
+data = {}
+
+
+def recursive_both(line, data):
+    """
+    Recursively calculate differences between terms and find the first term
+    in the sequence.
+    """
+
+    # If we haven't reached the bottom (all zeros) calculate the difference
+    # of terms and recurse, the return will be the first term
+    first_term = 0
+    next_term = 0
+    if not (sum(line) == 0 and np.unique(line).size == 1):
+        first_term, next_term = recursive_both(line[1:] - line[:-1], data)
+
+    new_line = list(line)
+    new_line.insert(0, first_term)
+    new_line.append(next_term)
+
+    data.setdefault("lines", []).append(new_line)
+
+    return line[0] - first_term, line[-1] + next_term
+
+
+# Loop over lines
+result1, result2 = 0, 0
+for i, line in enumerate(lines):
+    # Recursively find the next term
+    first_term, next_term = recursive_both(line, data.setdefault(i, {}))
+    result2 += first_term
+    result1 += next_term
+
+print("Combined:", result1, result2)
+
+# Construct plot behaviour
+xs = []
+ys = []
+colors = []
+nline = 0
+for key in list(data.keys())[:100]:
+    for line in data[key]["lines"]:
+        for n, val in enumerate(line):
+            nline += 1
+            xs.append(nline)
+            ys.append(val)
+            colors.append(n)
+
+xs = np.array(xs)
+ys = np.array(ys)
+colors = np.array(colors)
+
+# Create a colormap
+cmap = colormaps["plasma"]
+
+# Normalize data to the range [0, 1] for colormap mapping
+normalize = plt.Normalize(min(colors), max(colors))
+
+ys_func = interp1d(xs, ys, kind="cubic")
+colors_func = interp1d(xs, colors, kind="linear")
+
+fig = plt.figure(figsize=(10, 6))
+ax = fig.add_subplot(111)
+for i in range(len(xs) - 1):
+    new_xs = np.linspace(xs[i], xs[i + 1], 10)
+    for j in range(10):
+        ax.plot(
+            new_xs[j : j + 2],
+            np.arcsinh(ys_func(new_xs[j : j + 2])),
+            color=cmap(normalize(colors_func(new_xs[j]))),
+        )
+ax.axis(False)
+plt.show()
