@@ -52,7 +52,7 @@ Starting at AAA, follow the left/right instructions. How many steps are
 required to reach ZZZ?
 """
 import sys
-
+import math
 
 # Part 1
 
@@ -154,28 +154,4 @@ while len(poss) > 0:
 
 print(ends)
 
-
-def greatest_common_divisor(a, b):
-    while b:
-        a, b = b, a % b
-    return a
-
-
-def lowest_common_multiple(a, b):
-    # Calculate the Least Common Multiple (LCM) using the formula: LCM(a, b) = (a * b) / GCD(a, b)
-    return a * b // greatest_common_divisor(a, b)
-
-
-def lcm_of_list(numbers):
-    # Calculate the LCM of a list of numbers
-    if not numbers:
-        return None
-
-    result_lcm = numbers[0]
-    for num in numbers[1:]:
-        result_lcm = lowest_common_multiple(result_lcm, num)
-
-    return result_lcm
-
-
-print("Part 2:", lcm_of_list(ends))
+print("Part 2:", math.lcm(*ends))
