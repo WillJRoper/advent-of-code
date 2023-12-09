@@ -270,15 +270,24 @@ source_maps = [*seed_ranges]
 
 # Loop over map order
 for key in map_order:
-    # Define lists for these maps
+    # Define destination list
     dest_maps = []
 
     # Loop over maps
-    for source_map in source_maps:
+    while len(source_maps) > 0:
+        # Get the next source map
+        source_map = source_maps.pop(0)
+
+        # Flag for whether an overlap is found
         found_overlap = False
+
+        # Lists of overlaps
         overlaps = []
         non_overlap = []
+
+        # Loop over destination maps
         for dest_map in maps[key]:
+            # Find overlap
             overlap = dest_map.get_overlap(source_map)
             if len(overlap) > 0:
                 overlaps.append(overlap)
@@ -295,17 +304,18 @@ for key in map_order:
                 dest_maps.append(dest_map.get_dest_ranges(overlap))
                 found_overlap = True
 
+        # No overlap: dest = source
         if not found_overlap:
             dest_maps.append(source_map)
 
+        # Add the overlaps as sources for testing with other destination maps
         if len(non_overlap) > 0:
-            dest_maps.extend(non_overlap)
+            source_maps.extend(non_overlap)
 
-        # before_subset = range(source_map.start, subset_range.start)
-        # after_subset = range(overlaps[].stop, source_map.stop)
-
+    # Next set of sources are this set of destinations
     source_maps = dest_maps
 
+# Get the minimum of each location range
 locs = [r.start for r in dest_maps]
 
 print("Part 2:", min(locs))
